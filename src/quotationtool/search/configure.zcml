@@ -1,0 +1,20 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope">
+
+  <include file="dependencies.zcml"/>
+  
+  <utility
+      name="quotationtool.search.query.conjunction"
+      component=".vocabulary.conjunctions"
+      provides="zope.schema.interfaces.IVocabularyFactory"
+      />
+
+  <utility
+      name="quotationtool.search.query.quality"
+      component=".vocabulary.qualities"
+      provides="zope.schema.interfaces.IVocabularyFactory"
+      />
+
+  <include package=".browser"/>
+
+</configure>

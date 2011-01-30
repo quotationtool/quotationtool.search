@@ -1,0 +1,13 @@
+<tr>
+  <td>
+    <input 
+	type="radio" name="" value=""
+	tal:attributes="value view/searchFormURL | nothing;
+			name view/input_name"/>
+  </td>
+  <td>
+    <span tal:content="view/label">Referatory</span>:
+    <span tal:content="view/description | nothing">
+    The referatory contains ...</span>
+  </td>
+</tr>

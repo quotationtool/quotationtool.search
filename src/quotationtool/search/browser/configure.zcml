@@ -1,0 +1,70 @@
+<configure
+    xmlns:zope="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:z3c="http://namespaces.zope.org/z3c"
+    i18n_domain="quotationtool">
+
+  <include file="dependencies.zcml"/>
+
+  <z3c:pagelet
+      name="search.html"
+      for="quotationtool.site.interfaces.IQuotationtoolSite"
+      class=".search.ChooseSearchTarget"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      permission="zope.View"
+      />
+  <z3c:template
+      for=".search.ChooseSearchTarget"
+      template="choose_search_target.pt"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      />
+  <z3c:siteMenuItem
+      for="*"
+      title="[quotationtool-search-navigation] Search"
+      name="quotationtool-search"
+      permission="zope.View"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      manager="quotationtool.skin.interfaces.IMainNav"
+      viewName="@@search.html"
+      cssActive="selected search"
+      cssInActive="search"
+      weight="10"
+      />
+
+  <browser:page
+      name="chooseSearchTarget"
+      for="quotationtool.site.interfaces.IQuotationtoolSite"
+      class=".search.ChooseSearchTargetRedirector"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      permission="zope.View"
+      />
+
+  <browser:viewletManager
+      name="search_target_manager"
+      provides=".search.ISearchTargetManager"
+      class=".search.SearchTargetManager"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      permission="zope.View"
+      />
+
+  <z3c:template
+      for=".search.SearchFormBase"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      template="search_form.pt"
+      />
+
+  <z3c:template
+      for=".search.SearchResultPageBase"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      template="search_result_page.pt"
+      />
+  
+  <z3c:macro
+      name="search-result-page"
+      template="search_result_page.pt"
+      macro="search-result-page"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      />
+
+
+</configure>

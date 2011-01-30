@@ -1,0 +1,22 @@
+<div i18n:domain="quotationtool">
+  
+  <h1 i18n:translate="choose-search-target-label">Search</h1>
+
+  <p i18n:translate="choose-search-target-prompt">Choose the search target!</p>
+
+  <form 
+      method="post" action="@@chooseSearchTarget"
+      tal:attributes="action string:${context/@@absolute_url}/@@chooseSearchTarget">
+    <table>
+      <tal:block content="structure provider:search_target_manager"/>
+      <tr>
+	<td>&nbsp;</td>
+	<td>
+	  <button 
+	      type="submit" name="search"
+	      i18n:translate="search-button-label">Search</button>
+	</td>
+      </tr>
+    </table>
+  </form>
+</div>

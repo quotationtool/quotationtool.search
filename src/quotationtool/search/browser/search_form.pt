@@ -1,0 +1,83 @@
+<div i18n:domain="quotationtool">
+  
+  <h1 tal:content="view/label | default">Search</h1>
+
+  <!--p class="bug">
+    This is still very buggy due to a bug in the implementation of
+    weighted set unions and intersections. Sorry!
+  </p-->
+    
+  <table 
+      id="search-form">
+    <form 
+	action="searchResultPage.html"
+	method="post"
+	tal:attributes="action view/action">
+      <tal:block repeat="query view/query">
+	<tr class="index-row">
+	  <td class="index">
+	    <select 
+		name="search.0.index"
+		tal:attributes="name string:${view/prefix}${repeat/query/index}.index">
+	      <tal:block repeat="index view/getIndices">
+	      <option value="author" selected="selected"
+		  tal:condition="python: query == index.__name__"
+		  tal:attributes="value index/__name__"
+		  tal:content="python: index.interface[index.__name__].title"
+		  >Author / Uniform Author</option>
+	      <option value="author"
+		  tal:condition="python: query != index.__name__"
+		  tal:attributes="value index/__name__"
+		  tal:content="python: index.interface[index.__name__].title"
+		  >Author / Uniform Author</option>
+	      </tal:block>
+	    </select>
+	  </td>
+	  <td class="query">
+	    <input  type="text"
+		name="search.0.query" id="search.0.query"
+		tal:attributes="name string:${view/prefix}${repeat/query/index}.query;
+				id string:${view/prefix}${repeat/query/index}.query"/>
+	  </td>
+	</tr>
+      </tal:block>
+      <tr class="search-submit-row">
+	<td>&nbsp;</td>
+	<td>
+	  <button type="submit" 
+		  i18n:translate="find-button-label">Find!</button>
+	</td>
+      </tr>
+    </form>
+  </table>
+
+  <h2 i18n:translate="search-options-label">About search options</h2>
+
+  <h3 i18n:translate="search-jokers-label">Jokers</h3>
+
+  <table id="search-form-jokers">
+    <tr>
+      <td>*</td>
+      <td i18n:translate="asterix-joker-desc">Replaces arbitrary many characters</td>
+      <!--td>'h*gger' matches 'Heidegger', 'Himdigger' etc.<td-->
+    </tr>
+    <tr>
+      <td>?</td>
+      <td i18n:translate="questionmark-joker-desc">Replaces exactly one character</td>
+    </tr>
+  </table>
+
+  <h3 i18n:translate="search-indices-label">Indices</h3>
+
+  <table id="search-form-index-legend">
+    <tr tal:repeat="index view/getIndices">
+      <td class="index-name">
+	<span tal:content="python: getattr(index.interface[index.__name__], 'title', u'')">Index</span>: 
+      </td>
+      <td class="index-description">
+	<span tal:content="python: getattr(index.interface[index.__name__], 'description', u'')">Description</span>
+      </td>
+    </tr>
+  </table>
+
+</div>
