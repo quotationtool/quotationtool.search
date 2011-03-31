@@ -1,0 +1,6 @@
+<div class="primers" 
+    tal:condition="view/viewlets" 
+    tal:repeat="viewlet view/viewlets">
+  <div class="primer"
+       tal:content="structure viewlet/render"/>
+</div>

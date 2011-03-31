@@ -15,6 +15,7 @@ from zope.app.component import hooks
 from zope.publisher.browser import BrowserView
 from zope.i18nmessageid import MessageFactory
 from zope.viewlet.manager import ViewletManager 
+import os.path
 
 from quotationtool.search import interfaces
 from quotationtool.search.interfaces import _
@@ -22,9 +23,11 @@ from quotationtool.search.interfaces import _
 
 PREFIX = u'search.'
 
+primer_template = os.path.join(os.path.dirname(__file__), 'searchformprimer.pt')
 
 SearchFormPrimer = ViewletManager('search_form_primer',
                                   interfaces.ISearchFormPrimer,
+                                  template = primer_template,
                                   bases = (WeightOrderedViewletManager,))
 
 
