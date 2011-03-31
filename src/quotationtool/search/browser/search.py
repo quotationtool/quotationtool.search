@@ -14,12 +14,18 @@ import zope.traversing
 from zope.app.component import hooks
 from zope.publisher.browser import BrowserView
 from zope.i18nmessageid import MessageFactory
+from zope.viewlet.manager import ViewletManager 
 
-
-_ = MessageFactory('quotationtool')
+from quotationtool.search import interfaces
+from quotationtool.search.interfaces import _
 
 
 PREFIX = u'search.'
+
+
+SearchFormPrimer = ViewletManager('search_form_primer',
+                                  interfaces.ISearchFormPrimer,
+                                  bases = (WeightOrderedViewletManager,))
 
 
 class SearchFormBase(BrowserPagelet):

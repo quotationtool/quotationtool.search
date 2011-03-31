@@ -1,8 +1,15 @@
 import zope.interface
 from zope.i18nmessageid import MessageFactory
+from zope.viewlet.interfaces import IViewletManager
 
 
 _ = MessageFactory('quotationtool')
+
+
+class ISearchFormPrimer(IViewletManager):
+    """A viewlet manager for a primer to the search form. Register
+    viewlets for snippets that should be displayed prior to the search
+    form."""
 
 
 class IQuery(zope.interface.Interface):

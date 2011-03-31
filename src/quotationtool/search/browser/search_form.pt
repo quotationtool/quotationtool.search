@@ -1,4 +1,6 @@
 <div i18n:domain="quotationtool">
+
+  <div class="search-form-primer" tal:content="structure provider:search_form_primer"/> 
   
   <h1 tal:content="view/label | default">Search</h1>
 

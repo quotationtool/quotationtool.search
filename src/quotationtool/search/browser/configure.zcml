@@ -6,6 +6,14 @@
 
   <include file="dependencies.zcml"/>
 
+  <browser:viewletManager
+      name="search_form_primer"
+      class=".search.SearchFormPrimer"
+      provides="..interfaces.ISearchFormPrimer"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      permission="zope.View"
+      />
+
   <z3c:pagelet
       name="search.html"
       for="quotationtool.site.interfaces.IQuotationtoolSite"
