@@ -1,0 +1,10 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="quotationtool">
+
+  <permission
+      id="quotationtool.search.ManageSearch"
+      title="Manage search components."
+      />
+      
+</configure>

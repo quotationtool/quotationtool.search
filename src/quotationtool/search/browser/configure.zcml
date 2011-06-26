@@ -15,7 +15,7 @@
       />
 
   <z3c:pagelet
-      name="search.html"
+      name="searchOFF.html"
       for="quotationtool.site.interfaces.IQuotationtoolSite"
       class=".search.ChooseSearchTarget"
       layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
@@ -74,5 +74,103 @@
       layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       />
 
+
+
+  <z3c:pagelet
+      for="quotationtool.site.interfaces.IQuotationtoolSite"
+      name="quickSearch.html"
+      class=".any.AnySearchPagelet"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      permission="zope.View"
+      />
+
+  <z3c:pagelet
+      for="quotationtool.site.interfaces.IQuotationtoolSite"
+      name="search.html"
+      class=".searcher.SearchForm"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      permission="zope.View"
+      />
+  <z3c:template
+      for=".searcher.SearchForm"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      template="searcher.pt"
+      />
+
+  <z3c:pagelet
+      for="quotationtool.site.interfaces.IQuotationtoolSite"
+      name="searchResult.html"
+      class=".result.SearchResult"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      permission="zope.View"
+      />
+  <z3c:template
+      for=".result.SearchResult"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      template="result.pt"
+      />
+  <zope:adapter
+      factory=".result.SearchResultValues"
+      />
+  <zope:adapter
+      name="label"
+      for="*
+	   quotationtool.skin.interfaces.IQuotationtoolBrowserLayer
+	   .result.ISearchResultTable"
+      provides="z3c.table.interfaces.IColumn"
+      factory=".result.LabelColumn"
+      />  
+  <zope:adapter
+      name="listview"
+      for="*
+	   quotationtool.skin.interfaces.IQuotationtoolBrowserLayer
+	   .result.ISearchResultTable"
+      provides="z3c.table.interfaces.IColumn"
+      factory=".result.ListViewColumn"
+      />  
+  <zope:adapter
+      name="flags"
+      for="*
+	   quotationtool.skin.interfaces.IQuotationtoolBrowserLayer
+	   .result.ISearchResultTable"
+      provides="z3c.table.interfaces.IColumn"
+      factory=".result.FlagsColumn"
+      />  
+
+ 
+
+  <z3c:pagelet
+      for="quotationtool.site.interfaces.IQuotationtoolSite"
+      name="reindex"
+      class=".indexer.IndexObjects"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      permission="quotationtool.search.ManageSearch"
+      />
+
+  <browser:viewletManager
+      name="searchresultinfo"
+      class=".info.SearchResultInfo"
+      provides="..interfaces.ISearchResultInfo"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      permission="zope.View"
+      />
+  <browser:viewlet
+      for="*"
+      name="quotationtool.search.browser.info.ResultCountViewlet"
+      manager="quotationtool.search.interfaces.ISearchResultInfo"
+      class=".info.ResultCountViewlet"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      permission="zope.View"
+      weight="20"
+      />
+
+  <zope:adapter
+      for="*
+	   zope.publisher.interfaces.browser.IBrowserRequest
+	   .searcher.SearchForm"
+      provides="..interfaces.ISearchFilterProvider"
+      factory=".searcher.DefaultSearchFilterProvider"
+      name="default"
+      />
 
 </configure>

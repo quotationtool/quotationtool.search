@@ -3,6 +3,8 @@
 
   <include file="dependencies.zcml"/>
   
+  <include file="permissions.zcml"/>
+
   <utility
       name="quotationtool.search.query.conjunction"
       component=".vocabulary.conjunctions"
@@ -14,6 +16,20 @@
       component=".vocabulary.qualities"
       provides="zope.schema.interfaces.IVocabularyFactory"
       />
+
+  <adapter
+      factory=".searcher.type_factory"
+      for=".interfaces.IQuotationtoolSearchFilter"
+      name="type-field"
+      />
+  <adapter
+      factory=".searcher.any_factory"
+      for=".interfaces.IQuotationtoolSearchFilter"
+      name="any-fulltext"
+      />
+
+  <subscriber
+      handler=".createIndicesSubscriber"/>
 
   <include package=".browser"/>
 

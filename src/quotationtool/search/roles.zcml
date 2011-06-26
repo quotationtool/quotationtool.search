@@ -1,0 +1,11 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="quotationtool">
+
+  <grant
+      permission="quotationtool.search.ManageSearch"
+      role="quotationtool.Editor"
+      />
+
+</configure>
+

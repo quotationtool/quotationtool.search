@@ -1,0 +1,119 @@
+<div i18n:domain="quotationtool">
+
+  <h1 tal:content="view/label | default">Search</h1>
+
+  <div class="status" tal:repeat="status view/status">
+    <div tal:content="status"/>
+  </div>
+    
+  <form 
+      action=""
+      method="post"
+      tal:attributes="action view/action">
+
+    <div class="filters">
+      <div tal:repeat="fltr view/filters">
+	<span class="filter">
+	  <input type="radio" name="search.filter" value="bibliography"
+	      tal:attributes="value python:fltr[0];
+			      name string:${view/prefix}filter"/>
+	  <span  tal:content="python:fltr[1].label">
+	    Bibliographic Entry
+	  </span>
+	</span>
+      </div>
+    </div>
+
+    <table id="search-form">
+      <tal:block repeat="query view/query">
+	<tr class="first-criterium-row" tal:condition="repeat/query/start">
+	  <td class="criterium" colspan="2">
+	    <metal:macro define-macro="criterium-selector">
+	    <select 
+		name="search.0.criterium"
+		tal:attributes="name string:${view/prefix}${repeat/query/index}.criterium">
+	      <tal:block repeat="criterium view/getCriteria">
+	      <option value="any-fulltext" selected="selected"
+		  tal:condition="python: query == criterium.indexOrName"
+		  tal:attributes="value criterium/indexOrName"
+		  tal:content="python: criterium.label"
+		  >Free Text</option>
+	      <option value="any-fulltext"
+		  tal:condition="python: query != criterium.indexOrName"
+		  tal:attributes="value criterium/indexOrName"
+		  tal:content="python: criterium.label"
+		  >Free Text</option>
+	      </tal:block>
+	    </select>
+	    </metal:macro>
+	  </td>
+	  <metal:macro define-macro="query">
+	  <td class="query">
+	    <input  type="text"
+		name="search.0.query" id="search.0.query"
+		tal:attributes="name string:${view/prefix}${repeat/query/index}.query;
+				id string:${view/prefix}${repeat/query/index}.query"/>
+	  </td>
+	  </metal:macro>
+	</tr>
+	<tr class="subsequent-criterium-row" tal:condition="not: repeat/query/start">
+	  <td class="">
+	    <select name="search.1.connector"
+		tal:attributes="name string:${view/prefix}${repeat/query/index}.connector">
+	      <option selected="selected"
+		  value="AND" i18n:translate="">and</option>
+	      <option
+		  value="OR" i18n:translate="">or</option>
+	      <option
+		  value="NOT" i18n:translate="">not</option>
+	    </select>
+	  </td>
+	  <td class="criterium">
+	    <metal:macro use-macro="template/macros/criterium-selector"/>
+	  </td>
+	  <metal:macro use-macro="template/macros/query"/>
+	</tr>
+      </tal:block>
+      <tr class="search-submit-row">
+	<td>&nbsp;</td>
+	<td>
+	  <button
+	      name="search.button.search"
+	      tal:attributes="name string:${view/prefix}button.search"
+	      type="submit" value="search"
+	      i18n:translate="find-button-label">Find!</button>
+	</td>
+      </tr>
+    </table>
+  </form>
+
+  <h2 i18n:translate="search-options-label">About search options</h2>
+
+  <h3 i18n:translate="search-jokers-label">Jokers</h3>
+
+  <table id="search-form-jokers">
+    <tr>
+      <td>*</td>
+      <td i18n:translate="asterix-joker-desc">Replaces arbitrary many characters</td>
+      <!--td>'h*gger' matches 'Heidegger', 'Himdigger' etc.<td-->
+    </tr>
+    <tr>
+      <td>?</td>
+      <td i18n:translate="questionmark-joker-desc">Replaces exactly one character</td>
+    </tr>
+  </table>
+
+  <h3 i18n:translate="search-indices-label">Criteria</h3>
+
+  <table id="search-form-criterium-legend">
+    <tr tal:repeat="criterium view/getCriteria">
+      <td class="criterium-name">
+	<span tal:content="python: getattr(criterium, 'label', u'')">Label</span>: 
+      </td>
+      <td class="criterium-description">
+	<span tal:content="python: getattr(criterium, 'description', u'')">Description</span>
+      </td>
+    </tr>
+  </table>
+
+</div>

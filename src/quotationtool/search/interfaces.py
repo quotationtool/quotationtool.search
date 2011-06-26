@@ -1,9 +1,41 @@
 import zope.interface
 from zope.i18nmessageid import MessageFactory
 from zope.viewlet.interfaces import IViewletManager
+from z3c.searcher.interfaces import ISearchFilter
 
 
 _ = MessageFactory('quotationtool')
+
+
+class IQuotationtoolSearchFilter(ISearchFilter):
+    """ Default search filter. Searches for any content."""
+
+
+class ITypeExtent(zope.interface.Interface):
+
+    def delimit():
+        """ Limits the search to a type extension."""
+
+
+class ISearchFilterProvider(zope.interface.Interface):
+
+    filterFactory = zope.interface.Attribute(""" Factory to make search filter.""")
+
+    resultURL = zope.interface.Attribute("""Search Result URL""")
+
+    label = zope.interface.Attribute("""Label in UI""")
+
+    session_name = zope.interface.Attribute("""Name of the filter in the session.""")
+
+    
+class ISearchResultPage(zope.interface.Interface):
+    """ A marker interface for pages that show search results. The
+    Search nav item is active on them."""
+
+
+class ISearchResultInfo(IViewletManager):
+    """ Information about search result."""
+
 
 
 class ISearchFormPrimer(IViewletManager):

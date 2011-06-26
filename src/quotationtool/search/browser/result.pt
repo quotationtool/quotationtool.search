@@ -1,0 +1,16 @@
+<div i18n:domain="quotationtool">
+
+  <div tal:content="structure provider:searchresultinfo"/>
+
+  <p i18n:translate="">
+    For a more detailed presentation of search results please go back to
+    the search form and choose a more specific search target.
+  </p>
+
+  <div class="batch" tal:content="structure view/renderBatch"/>
+
+  <div tal:replace="structure view/renderTable"/>
+
+  <div class="batch" tal:content="structure view/renderBatch"/>
+
+</div>
