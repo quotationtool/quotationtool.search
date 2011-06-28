@@ -17,7 +17,7 @@
 	  <input type="radio" name="search.filter" value="bibliography"
 	      tal:attributes="value python:fltr[0];
 			      name string:${view/prefix}filter"/>
-	  <span  tal:content="python:fltr[1].label">
+	  <span  tal:content="python:fltr[1].title">
 	    Bibliographic Entry
 	  </span>
 	</span>

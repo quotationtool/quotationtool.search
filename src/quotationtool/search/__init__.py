@@ -1,7 +1,7 @@
 import zope.component
 from quotationtool.site.interfaces import INewQuotationtoolSiteEvent
 from z3c.indexer.interfaces import IIndex
-from z3c.indexer.index import TextIndex, FieldIndex
+from z3c.indexer.index import TextIndex, FieldIndex, ValueIndex
 
 
 def createIndices(site):
@@ -17,6 +17,10 @@ def createIndices(site):
     if not default.has_key('type-field'):
         type_field = default['type-field'] = FieldIndex()
         sm.registerUtility(type_field, IIndex, name='type-field')
+
+    if not default.has_key('id-field'):
+        id_value = default['id-field'] = FieldIndex()
+        sm.registerUtility(id_value, IIndex, name='id-field')
 
 
 @zope.component.adapter(INewQuotationtoolSiteEvent)

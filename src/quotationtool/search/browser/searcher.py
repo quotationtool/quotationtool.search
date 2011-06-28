@@ -1,41 +1,12 @@
 import zope.component
-import zope.interface
 from z3c.searcher.filter import SearchFilter
-from z3c.searcher.interfaces import ISearchSession, ISearchCriterium
-from zope.traversing.browser import absoluteURL
+from z3c.searcher.interfaces import ISearchSession, ISearchCriterium, ISearchFilter
 from z3c.pagelet.browser import BrowserPagelet
 from zope.index.text import parsetree
-from zope.traversing.browser.absoluteurl import absoluteURL
-from zope.publisher.interfaces.browser import IBrowserRequest
-from zope.app.component.hooks import getSite
 
-from quotationtool.search.interfaces import ISearchFilterProvider, _
-from quotationtool.search.interfaces import ITypeExtent
+from quotationtool.search.interfaces import _
+from quotationtool.search.interfaces import ITypeExtent, ICriteriaChainSpecifier, IResultSpecifier
 from quotationtool.search.searcher import QuotationtoolSearchFilter
-
-
-class DefaultSearchFilterProvider(object):
-    """ Provide search for with search filter and information about it."""
-    
-    zope.interface.implements(ISearchFilterProvider)
-
-    def __init__(self, context, request, view):
-        self.context = context
-        self.request = request
-        self.view = view
-
-    filterFactory = QuotationtoolSearchFilter
-
-    label = _('quotationtoolsearchfilterprovider-label', u"Any Content")
-
-    type_query = u''
-
-    session_name = 'any'
-
-    @property
-    def resultURL(self):
-        site = getSite()
-        return absoluteURL(site, self.request) + u"/@@searchResult.html"
 
 
 class SearchForm(BrowserPagelet):
@@ -49,8 +20,6 @@ class SearchForm(BrowserPagelet):
 
     session_name = 'last'
 
-    or_connector_on_first_criterium = True
-    
     @property
     def action(self):
         return self.request.getURL()
@@ -65,9 +34,7 @@ class SearchForm(BrowserPagelet):
 
     @property
     def filters(self):
-        return zope.component.getAdapters(
-            (self.context, self.request, self),
-            ISearchFilterProvider)
+        return zope.component.getFactoriesFor(ISearchFilter)
                 
     def getCriteria(self):
         for factory in self.filterFactory().criteriumFactories:
@@ -81,14 +48,12 @@ class SearchForm(BrowserPagelet):
         self.status = []
         if form.get(self.prefix+'button.search', u"") == 'search':
 
-            filterProvider = zope.component.getMultiAdapter(
-                (self.context, self.request, self),
-                interface=ISearchFilterProvider,
-                name=form.get(str(self.prefix+u"filter"), 'default'))
-            if not filterProvider:
+            fltr = zope.component.createObject(
+                str(form.get(self.prefix+u"filter", 
+                             u"quotationtool.search.searcher.QuotationtoolSearchFilter"))
+                )
+            if not fltr:
                 fltr = self.filterFactory()
-            else:
-                fltr = filterProvider.filterFactory()
 
             for i in range(len(list(self.query))):
                 connector = form.get(self.prefix+unicode(i)+u'.connector', u"OR")
@@ -109,9 +74,8 @@ class SearchForm(BrowserPagelet):
                 #                    mapping = {'CONNECTOR': connector}))
                 #    return
                 crit.value = query
-                if criteria_count == 0 and self.or_connector_on_first_criterium:
-                    # help users who do not think about it
-                    crit.connectorName = 'OR'
+                if criteria_count == 0:
+                    crit.connectorName = ICriteriaChainSpecifier(fltr).first_criterium_connector_name
                 else:
                     crit.connectorName = connector
                 fltr.addCriterium(crit)
@@ -139,6 +103,6 @@ class SearchForm(BrowserPagelet):
             session = ISearchSession(self.request)
             session.addFilter(self.session_name, fltr)
 
-            if filterProvider:
-                session.addFilter(filterProvider.session_name, fltr)
-                self.request.response.redirect(filterProvider.resultURL)
+            session.addFilter(IResultSpecifier(fltr).session_name, fltr)
+            self.request.response.redirect(IResultSpecifier(fltr).resultURL(
+                    self.context, self.request))

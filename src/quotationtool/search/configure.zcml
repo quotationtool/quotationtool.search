@@ -1,20 +1,12 @@
 <configure
     xmlns="http://namespaces.zope.org/zope">
 
-  <include file="dependencies.zcml"/>
-  
+  <include file="dependencies.zcml"/>  
   <include file="permissions.zcml"/>
 
   <utility
-      name="quotationtool.search.query.conjunction"
-      component=".vocabulary.conjunctions"
-      provides="zope.schema.interfaces.IVocabularyFactory"
-      />
-
-  <utility
-      name="quotationtool.search.query.quality"
-      component=".vocabulary.qualities"
-      provides="zope.schema.interfaces.IVocabularyFactory"
+      component=".searcher.quotationtool_search_filter_factory"
+      name="quotationtool.search.searcher.QuotationtoolSearchFilter"
       />
 
   <adapter
@@ -27,10 +19,30 @@
       for=".interfaces.IQuotationtoolSearchFilter"
       name="any-fulltext"
       />
+  <adapter
+      factory=".searcher.id_factory"
+      for=".interfaces.IQuotationtoolSearchFilter"
+      name="id-field"
+      />
 
   <subscriber
       handler=".createIndicesSubscriber"/>
 
   <include package=".browser"/>
+
+
+  <!-- BBB -->
+  <utility
+      name="quotationtool.search.query.conjunction"
+      component=".vocabulary.conjunctions"
+      provides="zope.schema.interfaces.IVocabularyFactory"
+      />
+  <utility
+      name="quotationtool.search.query.quality"
+      component=".vocabulary.qualities"
+      provides="zope.schema.interfaces.IVocabularyFactory"
+      />
+
+
 
 </configure>

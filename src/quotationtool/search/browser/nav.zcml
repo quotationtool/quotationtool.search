@@ -1,0 +1,50 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:z3c="http://namespaces.zope.org/z3c"
+    i18n_domain="quotationtool">
+
+  <!-- bibliography -->
+  <z3c:siteMenuItem
+      for="*"
+      title="[quotationtool-search-navigation] Search"
+      name="search"
+      class=".nav.SearchMainNavItem"
+      permission="zope.View"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      manager="quotationtool.skin.interfaces.IMainNav"
+      viewName="search.html"
+      weight="10"
+      subMenuProviderName="searchsubnav"
+      />
+  <!-- adaptation: context, request, view, menu, item. See
+       z3c.menu.ready2go.checker for more info. -->
+  <adapter
+      for="quotationtool.site.interfaces.IQuotationtoolSite
+           zope.publisher.interfaces.browser.IBrowserRequest
+           .searcher.SearchForm
+           quotationtool.skin.interfaces.IMainNav
+           .nav.ISearchMainNavItem"
+      provides="z3c.menu.ready2go.interfaces.ISelectedChecker"
+      factory="z3c.menu.ready2go.checker.TrueSelectedChecker"
+      />
+  <adapter
+      for="zope.interface.Interface
+           zope.publisher.interfaces.browser.IBrowserRequest
+           ..interfaces.ISearchResultPage
+           quotationtool.skin.interfaces.IMainNav
+           .nav.ISearchMainNavItem"
+      provides="z3c.menu.ready2go.interfaces.ISelectedChecker"
+      factory="z3c.menu.ready2go.checker.TrueSelectedChecker"
+      />
+
+  <browser:viewletManager
+      name="searchsubnav"
+      class=".nav.SearchSubNav"
+      provides=".nav.ISearchSubNav"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      permission="zope.View"
+      />
+
+
+</configure>
