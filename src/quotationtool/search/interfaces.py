@@ -54,6 +54,16 @@ class IResultSpecifier(zope.interface.Interface):
         default = 'any',
         )
 
+class ICriteriumDescription(zope.interface.Interface):
+    """ Provide the user with a description of the search
+    criterium."""
+
+    description = zope.schema.TextLine(
+        title = u"Description",
+        description = u"Provides the user with a description of the search criterium.",
+        required = False,
+        )
+
 
 class ISearchFilterProvider(zope.interface.Interface):
 

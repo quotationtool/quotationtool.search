@@ -1,4 +1,4 @@
-<div i18n:domain="quotationtool">
+<div id="search" i18n:domain="quotationtool">
 
   <h1 tal:content="view/label | default">Search</h1>
 
@@ -11,10 +11,21 @@
       method="post"
       tal:attributes="action view/action">
 
-    <div class="filters">
-      <div tal:repeat="fltr view/filters">
+    <div id="search-filters">
+      <div class="description" 
+	   i18n:translate="">
+	Delimit search result to:
+      </div>
+      <div class="choice" tal:repeat="fltr view/filters">
 	<span class="filter">
-	  <input type="radio" name="search.filter" value="bibliography"
+	  <input
+	      tal:condition="not: repeat/fltr/end"
+	      type="radio" name="search.filter" value="bibliography"
+	      tal:attributes="value python:fltr[0];
+			      name string:${view/prefix}filter"/>
+	  <input checked="checked"
+	      tal:condition="repeat/fltr/end"
+	      type="radio" name="search.filter" value="bibliography"
 	      tal:attributes="value python:fltr[0];
 			      name string:${view/prefix}filter"/>
 	  <span  tal:content="python:fltr[1].title">
@@ -57,7 +68,7 @@
 	  </metal:macro>
 	</tr>
 	<tr class="subsequent-criterium-row" tal:condition="not: repeat/query/start">
-	  <td class="">
+	  <td class="connector">
 	    <select name="search.1.connector"
 		tal:attributes="name string:${view/prefix}${repeat/query/index}.connector">
 	      <option selected="selected"
@@ -75,6 +86,7 @@
 	</tr>
       </tal:block>
       <tr class="search-submit-row">
+	<td>&nbsp;</td>
 	<td>&nbsp;</td>
 	<td>
 	  <button
@@ -103,17 +115,21 @@
     </tr>
   </table>
 
+  <!--
   <h3 i18n:translate="search-indices-label">Criteria</h3>
 
   <table id="search-form-criterium-legend">
-    <tr tal:repeat="criterium view/getCriteria">
+    <tr tal:repeat="criterium view/getLabelsAndDescriptions">
+      <tal:block condition="python:criterium[1]">
       <td class="criterium-name">
-	<span tal:content="python: getattr(criterium, 'label', u'')">Label</span>: 
+	<span tal:content="python: criterium[0]">Label</span>: 
       </td>
       <td class="criterium-description">
-	<span tal:content="python: getattr(criterium, 'description', u'')">Description</span>
+	<span tal:content="python: criterium[1]">Description</span>
       </td>
+      </tal:block>
     </tr>
   </table>
+  -->
 
 </div>

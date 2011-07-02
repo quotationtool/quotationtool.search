@@ -6,6 +6,7 @@ from zope.index.text import parsetree
 
 from quotationtool.search.interfaces import _
 from quotationtool.search.interfaces import ITypeExtent, ICriteriaChainSpecifier, IResultSpecifier
+from quotationtool.search.interfaces import ICriteriumDescription
 from quotationtool.search.searcher import QuotationtoolSearchFilter
 
 
@@ -34,12 +35,25 @@ class SearchForm(BrowserPagelet):
 
     @property
     def filters(self):
-        return zope.component.getFactoriesFor(ISearchFilter)
-                
+        default = None
+        for key, fltr in zope.component.getFactoriesFor(ISearchFilter):
+            if not isinstance(fltr(), self.filterFactory):
+                yield key, fltr
+            else:
+                default = (key, fltr)
+        if default:
+            yield default
+
     def getCriteria(self):
         for factory in self.filterFactory().criteriumFactories:
             if factory[0] == 'type-field': continue
             yield factory[1]()
+
+    def getLabelsAndDescriptions(self):
+        for crit in self.getCriteria():
+            desc = zope.component.queryAdapter(
+                crit, ICriteriumDescription, default=None)
+            yield (getattr(crit, 'label', u""), getattr(desc, 'description', u""))
         
     def update(self):
         super(SearchForm, self).update()

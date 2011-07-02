@@ -44,7 +44,7 @@ class QuotationtoolSearchFilter(SearchFilter):
 
 quotationtool_search_filter_factory = zope.component.factory.Factory(
     QuotationtoolSearchFilter,
-    _('QuotationtoolSearchFilter-title', u"Any Content"),
+    _('QuotationtoolSearchFilter-title', u"Any content"),
     _('QuotationtoolSearchFilter-desc', u"Search for all content types.")
     )
 
@@ -77,8 +77,13 @@ type_factory = factory(TypeCriterium, 'type-field')
 class IdCriterium(SearchCriterium):
     """ Search criterium for 'id-field' index."""
 
+    zope.interface.implements(interfaces.ICriteriumDescription)
+
     indexOrName = 'id-field'
 
     label = _('id-field-label', u"ID")
+
+    description = _('id-field-desc',
+                    u"Search for an item by its unique id-number.")
 
 id_factory = factory(IdCriterium, 'id-field')    
