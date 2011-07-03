@@ -50,8 +50,8 @@ setup(
         'zope.app.schema',
         'zope.security',
         'zope.securitypolicy',
-        'zc.catalog',
-        'zope.catalog',
+        'z3c.indexer',
+        'z3c.searcher',
 
         # for browser related components
         'zope.exceptions',
@@ -75,6 +75,7 @@ setup(
 
         'quotationtool.skin',
         'quotationtool.site',
+        'quotationtool.security',
         ],
     extras_require = dict(
         test = [

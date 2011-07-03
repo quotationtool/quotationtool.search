@@ -1,6 +1,6 @@
-<div id="search" i18n:domain="quotationtool">
+<div i18n:domain="quotationtool" id="search">
 
-  <h1 tal:content="view/label | default">Search</h1>
+  <h1 tal:content="view/label | nothing">Search</h1>
 
   <div class="status" tal:repeat="status view/status">
     <div tal:content="status"/>
@@ -43,7 +43,7 @@
 	    <select 
 		name="search.0.criterium"
 		tal:attributes="name string:${view/prefix}${repeat/query/index}.criterium">
-	      <tal:block repeat="criterium view/getCriteria">
+	      <tal:block repeat="criterium view/criteria">
 	      <option value="any-fulltext" selected="selected"
 		  tal:condition="python: query == criterium.indexOrName"
 		  tal:attributes="value criterium/indexOrName"

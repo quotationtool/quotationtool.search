@@ -52,9 +52,15 @@ quotationtool_search_filter_factory = zope.component.factory.Factory(
 class AnyCriterium(TextCriterium):
     """ Full text criterium for 'any-fulltext' index."""
 
+    zope.interface.implements(interfaces.ICriteriumDescription)
+
     indexOrName = 'any-fulltext'
 
     label = _('any-fulltext-label', u"Free Text (Any Field)")
+    
+    description = _('any-fulltext-desc', u"Matches in any (or almost any) field.")
+
+    ui_weight = 1
 
 any_factory = factory(AnyCriterium, 'any-fulltext')
 
@@ -77,13 +83,25 @@ type_factory = factory(TypeCriterium, 'type-field')
 class IdCriterium(SearchCriterium):
     """ Search criterium for 'id-field' index."""
 
-    zope.interface.implements(interfaces.ICriteriumDescription)
-
     indexOrName = 'id-field'
 
     label = _('id-field-label', u"ID")
 
-    description = _('id-field-desc',
-                    u"Search for an item by its unique id-number.")
-
 id_factory = factory(IdCriterium, 'id-field')    
+
+
+class IdCriteriumDescription(object):
+    """ An adapter for the Id Criterium. """
+
+    zope.interface.implements(interfaces.ICriteriumDescription)
+
+    zope.component.adapts(IdCriterium)
+
+    def __init__(self, context):
+        self.context = context
+
+    description = _('id-field-desc',
+                    u"Matches if an item's unique id-number equals the query.")
+
+    ui_weight = 5
+

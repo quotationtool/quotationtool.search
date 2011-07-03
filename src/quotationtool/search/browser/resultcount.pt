@@ -1,4 +1,4 @@
-<div class="resultcount"
+<div class="resultcount" i18n:domain="quotationtool"
      i18n:translate="">
   Objects found:
   <span i18n:name="count" tal:content="view/count">10</span>

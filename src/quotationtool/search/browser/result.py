@@ -59,7 +59,7 @@ class LabelColumn(column.LinkColumn):
     def getLinkContent(self, item):
         label = zope.component.getMultiAdapter(
             (item, self.request), name='label').__call__()
-        return translate(label)
+        return translate(label, context=self.request)
 
 
 class ListViewColumn(column.Column):

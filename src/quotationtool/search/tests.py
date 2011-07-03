@@ -15,8 +15,6 @@ def setUpZCML(test):
 
     """
     XMLConfig('configure.zcml', quotationtool.search)()
-    #common.setUpConjunctionVocabulary(test)
-    #common.setUpQualityVocabulary(test)
 
 
 def test_suite():
@@ -25,8 +23,8 @@ def test_suite():
                                  tearDown = tearDown,
                                  optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
                                  ),
-            doctest.DocTestSuite('quotationtool.search.query',
-                                 setUp = setUpZCML,
+            doctest.DocFileSuite('README.txt',
+                                 setUp = setUp,
                                  tearDown = tearDown,
                                  optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
                                  ),

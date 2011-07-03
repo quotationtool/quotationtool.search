@@ -24,25 +24,13 @@
       for=".interfaces.IQuotationtoolSearchFilter"
       name="id-field"
       />
+  <adapter
+      factory=".searcher.IdCriteriumDescription"
+      />
 
   <subscriber
       handler=".createIndicesSubscriber"/>
 
   <include package=".browser"/>
-
-
-  <!-- BBB -->
-  <utility
-      name="quotationtool.search.query.conjunction"
-      component=".vocabulary.conjunctions"
-      provides="zope.schema.interfaces.IVocabularyFactory"
-      />
-  <utility
-      name="quotationtool.search.query.quality"
-      component=".vocabulary.qualities"
-      provides="zope.schema.interfaces.IVocabularyFactory"
-      />
-
-
 
 </configure>

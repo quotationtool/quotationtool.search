@@ -15,11 +15,15 @@ class SearchForm(BrowserPagelet):
 
     filterFactory = QuotationtoolSearchFilter
 
+    label = _('search-form-label', u"Search")
+
     prefix = 'search.'
 
     status = []
 
     session_name = 'last'
+
+    nonui_criteria = ('type-field',) # criteria non present on the UI
 
     @property
     def action(self):
@@ -27,11 +31,25 @@ class SearchForm(BrowserPagelet):
 
     @property
     def query(self):
-        yield 'any-fulltext'
-        for factory in self.filterFactory().criteriumFactories:
-            if factory[0] == 'any-fulltext': continue
-            if factory[0] == 'type-field': continue
-            yield factory[0]
+        for factory in self.getCriteriaInOrder():
+            if not factory[0] in self.nonui_criteria:
+                yield factory[0]
+
+    @property
+    def criteria(self):
+        for factory in self.getCriteriaInOrder():
+            if not factory[0] in self.nonui_criteria:
+                yield factory[1]()
+
+    def getCriteriaInOrder(self):
+        factories = self.filterFactory().criteriumFactories
+        def getWeight(factory):
+            try:
+                desc = ICriteriumDescription(factory[1]())
+            except Exception:
+                desc = None
+            return getattr(desc, 'ui_weight', ICriteriumDescription['ui_weight'].default)
+        return sorted(factories, cmp=lambda x,y: cmp(getWeight(x), getWeight(y)))
 
     @property
     def filters(self):
@@ -44,16 +62,17 @@ class SearchForm(BrowserPagelet):
         if default:
             yield default
 
-    def getCriteria(self):
-        for factory in self.filterFactory().criteriumFactories:
-            if factory[0] == 'type-field': continue
-            yield factory[1]()
-
     def getLabelsAndDescriptions(self):
-        for crit in self.getCriteria():
-            desc = zope.component.queryAdapter(
-                crit, ICriteriumDescription, default=None)
-            yield (getattr(crit, 'label', u""), getattr(desc, 'description', u""))
+        for name, factory in self.getCriteriaInOrder():
+            crit = factory()
+            try:
+                desc = getattr(ICriteriumDescription(factory), 'description', u"")
+            except Exception:
+                desc = None
+            crit_type = u""
+            if ITextCriterium.providedBy(crit):
+                crit_type = _(u"Fulltext Index") 
+            yield (name, crit, desc, crit_type)
         
     def update(self):
         super(SearchForm, self).update()
