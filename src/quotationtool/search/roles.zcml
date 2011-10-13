@@ -3,8 +3,33 @@
     i18n_domain="quotationtool">
 
   <grant
+      permission="quotationtool.search.Search"
+      role="quotationtool.Visitor"
+      />
+
+  <grant
+      permission="quotationtool.search.Search"
+      role="quotationtool.Member"
+      />
+
+  <grant
+      permission="quotationtool.search.Search"
+      role="quotationtool.Editor"
+      />
+
+  <grant
+      permission="quotationtool.search.Search"
+      role="quotationtool.Manager"
+      />
+
+  <grant
       permission="quotationtool.search.ManageSearch"
       role="quotationtool.Editor"
+      />
+
+  <grant
+      permission="quotationtool.search.ManageSearch"
+      role="quotationtool.Manager"
       />
 
 </configure>

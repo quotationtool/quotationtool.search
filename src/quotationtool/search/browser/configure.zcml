@@ -13,7 +13,7 @@
       name="search.html"
       class=".searcher.SearchForm"
       layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
-      permission="zope.View"
+      permission="quotationtool.search.Search"
       />
   <z3c:template
       for=".searcher.SearchForm"
@@ -26,7 +26,7 @@
       name="searchResult.html"
       class=".result.SearchResult"
       layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
-      permission="zope.View"
+      permission="quotationtool.search.Search"
       />
   <z3c:template
       for=".result.SearchResult"
@@ -84,7 +84,7 @@
       manager="quotationtool.search.interfaces.ISearchResultInfo"
       class=".info.ResultCountViewlet"
       layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
-      permission="zope.View"
+      permission="quotationtool.search.Search"
       weight="20"
       />
 

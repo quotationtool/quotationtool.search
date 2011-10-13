@@ -10,7 +10,7 @@
       title="[quotationtool-search-navigation] Search"
       name="search"
       class=".nav.SearchMainNavItem"
-      permission="zope.View"
+      permission="quotationtool.search.Search"
       layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       manager="quotationtool.skin.interfaces.IMainNav"
       viewName="search.html"

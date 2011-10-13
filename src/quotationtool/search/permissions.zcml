@@ -3,6 +3,11 @@
     i18n_domain="quotationtool">
 
   <permission
+      id="quotationtool.search.Search"
+      title="Search for items in the database"
+      />
+
+  <permission
       id="quotationtool.search.ManageSearch"
       title="Manage search components."
       />
