@@ -12,8 +12,11 @@ class IndexObjects(BrowserPagelet):
         intids = zope.component.getUtility(
             IIntIds, context=self.context)
         for iid in intids:
-            index(intids.getObject(iid))
-            self.count += 1
+            try:
+                index(intids.getObject(iid))
+                self.count += 1
+            except Exception:
+                pass
 
     def render(self):
         return u"Indexed %d objects." % self.count
