@@ -21,6 +21,14 @@
       template="searcher.pt"
       />
 
+  <browser:viewletManager
+      name="searchform-extension"
+      class=".searcher.SearchFormExtensionManager"
+      provides="..interfaces.ISearchFormExtension"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      permission="zope.View"
+      />
+
   <z3c:pagelet
       for="quotationtool.site.interfaces.IQuotationtoolSite"
       name="searchResult.html"

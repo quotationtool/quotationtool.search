@@ -52,6 +52,8 @@ setup(
         'zope.securitypolicy',
         'z3c.indexer',
         'z3c.searcher',
+        'zope.app.generations',# dependency of z3c.searcher, bug that
+                               # not required there!
 
         # for browser related components
         'zope.exceptions',

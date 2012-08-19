@@ -3,8 +3,12 @@ from z3c.searcher.filter import SearchFilter
 from z3c.searcher.interfaces import ISearchSession, ISearchCriterium, ISearchFilter
 from z3c.pagelet.browser import BrowserPagelet
 from zope.index.text import parsetree
+from zope.viewlet.manager import ViewletManager, WeightOrderedViewletManager
+from zope.contentprovider.interfaces import IContentProvider
+from zope.viewlet.interfaces import IViewletManager
 
 from quotationtool.search.interfaces import _
+from quotationtool.search import interfaces
 from quotationtool.search.interfaces import ITypeExtent, ICriteriaChainSpecifier, IResultSpecifier
 from quotationtool.search.interfaces import ICriteriumDescription
 from quotationtool.search.searcher import QuotationtoolSearchFilter
@@ -114,6 +118,20 @@ class SearchForm(BrowserPagelet):
                 fltr.addCriterium(crit)
                 criteria_count += 1
 
+            # get criteria from search form extensions
+            extensions = zope.component.getMultiAdapter(
+                (self.context, self.request, self),
+                interfaces.ISearchFormExtension,
+                name = 'searchform-extension')
+            extensions.update()
+            extended_criteria = []
+            for extension in extensions.viewlets:
+                if interfaces.ICriteriaReturningForm.providedBy(extension):
+                    extended_criteria += extension.getCriteria(fltr, criteria_count, self.status)
+            for crit in extended_criteria:
+                fltr.addCriterium(crit)
+                criteria_count += 1
+
             # no input 
             if not criteria_count:
                 self.status.append(_(u"No values provided."))
@@ -139,3 +157,8 @@ class SearchForm(BrowserPagelet):
             session.addFilter(IResultSpecifier(fltr).session_name, fltr)
             self.request.response.redirect(IResultSpecifier(fltr).resultURL(
                     self.context, self.request))
+
+
+SearchFormExtensionManager = ViewletManager('searchform-extension',
+                                            interfaces.ISearchFormExtension,
+                                            bases=(WeightOrderedViewletManager,))

@@ -39,6 +39,17 @@ class ICriteriaChainSpecifier(zope.interface.Interface):
         )
 
 
+class ISearchFormExtension(IViewletManager):
+    """ Viewlets may be registered for this manager."""
+
+
+class ICriteriaReturningForm(zope.interface.Interface):
+    """ May be implemented by search form extensions."""
+
+    def getCriteria():
+        """ Returns criteria."""
+
+
 class IResultSpecifier(zope.interface.Interface):
     """ Provides Information about the search result page and provides
     this page with info."""

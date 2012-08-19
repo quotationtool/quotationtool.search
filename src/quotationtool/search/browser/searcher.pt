@@ -97,6 +97,8 @@
 	</td>
       </tr>
     </table>
+    <div class="searchform-extension" 
+	 tal:content="structure provider:searchform-extension"/>
   </form>
 
   <h2 i18n:translate="search-options-label">About search options</h2>
