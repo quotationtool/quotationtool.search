@@ -19,7 +19,7 @@ from quotationtool.search.searcher import QuotationtoolSearchFilter
 class SearchFormMixin(object):
     """ A mixin class for search forms."""
 
-    filterFactory = QuotationtoolSearchFilter
+    filterFactoryName = 'quotationtool.search.searcher.QuotationtoolSearchFilter'
 
     label = _('search-form-label', u"Search")
 
@@ -32,6 +32,8 @@ class SearchFormMixin(object):
     nonui_criteria = ('type-field',) # criteria non present on the UI
 
     options_info = True
+
+    filter_choice = True
 
     @property
     def action(self):
@@ -50,7 +52,8 @@ class SearchFormMixin(object):
                 yield factory[1]()
 
     def getCriteriaInOrder(self):
-        factories = self.filterFactory().criteriumFactories
+        fltr = zope.component.createObject(self.filterFactoryName)
+        factories = fltr.criteriumFactories
         def getWeight(factory):
             try:
                 desc = ICriteriumDescription(factory[1]())
@@ -61,14 +64,8 @@ class SearchFormMixin(object):
 
     @property
     def filters(self):
-        default = None
         for key, fltr in zope.component.getFactoriesFor(ISearchFilter):
-            if not isinstance(fltr(), self.filterFactory):
-                yield key, fltr
-            else:
-                default = (key, fltr)
-        if default:
-            yield default
+            yield key, fltr
 
     def getLabelsAndDescriptions(self):
         for name, factory in self.getCriteriaInOrder():
@@ -87,13 +84,12 @@ class SearchFormMixin(object):
         criteria_count = 0
         self.status = []
         if form.get(self.prefix+'button.search', u"") == 'search':
-
             fltr = zope.component.createObject(
                 str(form.get(self.prefix+u"filter", 
-                             u"quotationtool.search.searcher.QuotationtoolSearchFilter"))
+                             self.filterFactoryName))
                 )
-            if not fltr:
-                fltr = self.filterFactory()
+            #if not fltr:
+            #    fltr = QuotationtoolSearchFilter()
 
             for i in range(len(list(self.query))):
                 connector = form.get(self.prefix+unicode(i)+u'.connector', u"OR")
@@ -190,9 +186,19 @@ class SearchViewlet(ViewletBase, SearchFormMixin):
 
 
 class SimpleSearchViewlet(SearchViewlet):
-    """ A viewlet presenting a simple search form with only one search criterium."""
+    """A viewlet presenting a simple search form with only one search
+    criterium.
+
+    This viewlet is not registered. You can easily registered this one
+    for which viewlet manager you want or derive an other class with
+    an other search target by setting filterFactoryName, which can be
+    set by ZCML.
+
+    """
 
     options_info = False
+
+    filter_choice = False
 
     @property
     def query(self):

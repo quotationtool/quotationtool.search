@@ -11,7 +11,7 @@
       method="post"
       tal:attributes="action view/action">
 
-    <div id="search-filters">
+    <div id="search-filters" tal:condition="view/filter_choice|default">
       <div class="description" 
 	   i18n:translate="">
 	Delimit search result to:
@@ -19,12 +19,12 @@
       <div class="choice" tal:repeat="fltr view/filters">
 	<span class="filter">
 	  <input
-	      tal:condition="not: repeat/fltr/end"
+	      tal:condition="python: view.filterFactoryName != fltr[0]"
 	      type="radio" name="search.filter" value="bibliography"
 	      tal:attributes="value python:fltr[0];
 			      name string:${view/prefix}filter"/>
 	  <input checked="checked"
-	      tal:condition="repeat/fltr/end"
+	      tal:condition="python: view.filterFactoryName == fltr[0]"
 	      type="radio" name="search.filter" value="bibliography"
 	      tal:attributes="value python:fltr[0];
 			      name string:${view/prefix}filter"/>

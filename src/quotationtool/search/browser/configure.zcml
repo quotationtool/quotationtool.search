@@ -14,6 +14,7 @@
       class=".searcher.SearchForm"
       layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       permission="quotationtool.search.Search"
+      filterFactoryName="quotationtool.search.searcher.QuotationtoolSearchFilter"
       />
   <z3c:template
       for=".searcher.SearchForm"
