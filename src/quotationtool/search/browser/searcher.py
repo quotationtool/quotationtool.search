@@ -6,6 +6,8 @@ from zope.index.text import parsetree
 from zope.viewlet.manager import ViewletManager, WeightOrderedViewletManager
 from zope.contentprovider.interfaces import IContentProvider
 from zope.viewlet.interfaces import IViewletManager
+from z3c.template.interfaces import IContentTemplate
+from zope.viewlet.viewlet import ViewletBase
 
 from quotationtool.search.interfaces import _
 from quotationtool.search import interfaces
@@ -14,8 +16,8 @@ from quotationtool.search.interfaces import ICriteriumDescription
 from quotationtool.search.searcher import QuotationtoolSearchFilter
 
 
-class SearchForm(BrowserPagelet):
-    """ A search form."""
+class SearchFormMixin(object):
+    """ A mixin class for search forms."""
 
     filterFactory = QuotationtoolSearchFilter
 
@@ -28,6 +30,8 @@ class SearchForm(BrowserPagelet):
     session_name = 'last'
 
     nonui_criteria = ('type-field',) # criteria non present on the UI
+
+    options_info = True
 
     @property
     def action(self):
@@ -78,8 +82,7 @@ class SearchForm(BrowserPagelet):
                 crit_type = _(u"Fulltext Index") 
             yield (name, crit, desc, crit_type)
         
-    def update(self):
-        super(SearchForm, self).update()
+    def _updateForm(self):
         form = self.request.form
         criteria_count = 0
         self.status = []
@@ -157,6 +160,48 @@ class SearchForm(BrowserPagelet):
             session.addFilter(IResultSpecifier(fltr).session_name, fltr)
             self.request.response.redirect(IResultSpecifier(fltr).resultURL(
                     self.context, self.request))
+
+
+class SearchForm(BrowserPagelet, SearchFormMixin):
+    """ A search form."""
+
+    def update(self):
+        super(SearchForm, self).update()
+        self._updateForm()
+
+
+class SearchViewlet(ViewletBase, SearchFormMixin):
+    """A search form in a viewlet.  It presents exactly the same search
+    form as the SearchForm pagelet.
+
+    """
+
+    template = None
+
+    def update(self):
+        self._updateForm()
+
+    def render(self):
+        if self.template is None:
+            template = zope.component.getMultiAdapter(
+                (self, self.request), IContentTemplate)
+            return template(self)
+        return self.template()
+
+
+class SimpleSearchViewlet(SearchViewlet):
+    """ A viewlet presenting a simple search form with only one search criterium."""
+
+    options_info = False
+
+    @property
+    def query(self):
+        """ Yield only one criterium."""
+        for factory in self.getCriteriaInOrder():
+            if not factory[0] in self.nonui_criteria:
+                yield factory[0]
+                break
+
 
 
 SearchFormExtensionManager = ViewletManager('searchform-extension',

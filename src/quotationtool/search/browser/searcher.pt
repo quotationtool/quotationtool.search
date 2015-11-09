@@ -101,6 +101,7 @@
 	 tal:content="structure provider:searchform-extension"/>
   </form>
 
+  <metal:block tal:condition="view/options_info|default">
   <h2 i18n:translate="search-options-label">About search options</h2>
 
   <h3 i18n:translate="search-jokers-label">Jokers</h3>
@@ -133,5 +134,6 @@
     </tr>
   </table>
   -->
+  </metal:block>
 
 </div>

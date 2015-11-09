@@ -21,6 +21,13 @@
       template="searcher.pt"
       />
 
+  <!-- template for search viewlets -->
+  <z3c:template
+      for=".searcher.SearchViewlet"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      template="searcher.pt"
+      />
+
   <browser:viewletManager
       name="searchform-extension"
       class=".searcher.SearchFormExtensionManager"
