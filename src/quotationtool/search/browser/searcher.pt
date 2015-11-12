@@ -1,4 +1,5 @@
-<div i18n:domain="quotationtool" id="search">
+<div i18n:domain="quotationtool" id="search" class="search"
+     tal:attributes="class view/klass|default">
 
   <h1 tal:content="view/label | nothing">Search</h1>
 
